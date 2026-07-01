@@ -1,0 +1,15 @@
+# Python virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Temp / scratch
+scratchpad/
+
+# Confidential — problem statement & template are marked "personal use only,
+# publishing is liable for legal action". Do NOT commit these.
+Samsung Capstone Problem statements (1).pdf
+Milestone 1 Template.docx
