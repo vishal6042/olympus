@@ -9,7 +9,20 @@ __pycache__/
 # Temp / scratch
 scratchpad/
 
+# Secrets — never commit the real Azure key (.env.example is committed instead)
+.env
+milestone2/.env
+
 # Confidential — problem statement & template are marked "personal use only,
 # publishing is liable for legal action". Do NOT commit these.
 Samsung Capstone Problem statements (1).pdf
 Milestone 1 Template.docx
+
+# Report drafts (Word) — large binaries that may embed the confidential problem statement.
+*.docx
+
+# Duplicate / team-renamed copies of the Milestone 1 notebook.
+Team_1_*
+
+# Editor settings
+.vscode/
