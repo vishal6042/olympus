@@ -5,7 +5,7 @@
 - created: 2026-07-10
 - branch: adlc/ADLC-001-robust-system-prompt
 - jira_mode: local
-- current_stage: ship
+- current_stage: done
 - gate1_spec_approved: true
 - gate2_push_approved: true
 - verify_attempts: 0
@@ -18,3 +18,4 @@
 - 2026-07-10 tests: added milestone2/tests/{conftest.py,test_prompts.py} (11 offline tests). → verify
 - 2026-07-10 verify: PASS — 11 passed. Wrote verification.md. Awaiting Gate 2.
 - 2026-07-10 GATE 2: approved by user (Approve & push). → ship
+- 2026-07-10 ship: committed d193153, pushed to origin. Run complete. → done
