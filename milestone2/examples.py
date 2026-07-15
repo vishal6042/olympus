@@ -81,4 +81,18 @@ FEW_SHOT_EXAMPLES = [
             "reasoning": "",
         },
     },
+    {
+        "review": "This is the wrong item and it arrived damaged — the seams are coming apart and there's a rip across the front.",
+        "context": "Department: Outerwear | Product: Denim Jacket",
+        "analysis": {
+            "estimated_rating": 1,
+            "overall_sentiment": "Negative",
+            "aspects": [
+                {"aspect": "defect", "sentiment": "Negative"},
+                {"aspect": "quality", "sentiment": "Negative"},
+            ],
+            "urgency": "High",
+            "reasoning": "",
+        },
+    },
 ]

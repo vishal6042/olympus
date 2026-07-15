@@ -61,8 +61,11 @@ def few_shot_messages(review: str, context: str = ""):
     """Few-Shot: prepend curated examples that demonstrate mixed sentiment & multiple aspects."""
     lines = [
         SYSTEM_ROLE,
-        "\nHere are examples of correctly analyzed reviews. Note how a single review can be "
-        "positive about one aspect and negative about another (mixed sentiment):",
+        "\nHere are examples of correctly analyzed reviews. Study how each one breaks a review into "
+        "multiple aspects per review and assigns a sentiment to each. Note the mixed-sentiment cases, "
+        "where a single review is Positive about one aspect and Negative about another, and how the "
+        "overall_sentiment and estimated_rating balance those aspects rather than following any single "
+        "one:",
     ]
     for ex in FEW_SHOT_EXAMPLES:
         lines.append(f"\nReview: \"{ex['review']}\"")
@@ -79,10 +82,15 @@ def cot_messages(review: str, context: str = ""):
     system = (
         SYSTEM_ROLE
         + "\n\nThink step by step and record your reasoning in the `reasoning` field:\n"
-        "Step 1: Identify every distinct aspect the review mentions.\n"
-        "Step 2: Assign a sentiment (Positive/Negative/Neutral) to each aspect.\n"
-        "Step 3: Weigh the aspects to decide the overall sentiment and estimate the 1-5 rating.\n"
-        "Step 4: Decide the urgency based on how serious the negative aspects are.\n"
+        "Step 1: Identify every distinct aspect the review actually mentions (e.g. fit, color, "
+        "quality, delivery, price, sizing).\n"
+        "Step 2: Assign a sentiment (Positive/Negative/Neutral) to each aspect, grounded in the "
+        "review text.\n"
+        "Step 3: Weigh those aspects to decide the overall sentiment, then map them onto the anchored "
+        "1-5 rating scale above (5 = strongly positive, 3 = mixed or neutral, 1 = very negative).\n"
+        "Step 4: Set the urgency using the High/Medium/Low tiers above (High for defects, damaged or "
+        "wrong items, or an angry customer; Medium for genuine dissatisfaction; Low for praise or "
+        "neutral remarks).\n"
         "Put your step-by-step explanation in `reasoning`, then fill the other fields accordingly."
     )
     user = f"Analyze the following customer review, reasoning step by step.{_context_block(context)}\n\nReview: \"{review}\""

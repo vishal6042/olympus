@@ -112,3 +112,52 @@ def test_cot_appends_reasoning_steps_after_system_role():
     for step in ("Step 1", "Step 2", "Step 3", "Step 4"):
         assert step in system
     assert "reasoning" in system.lower()
+
+
+# --- ADLC-002 AC5: Few-Shot framing renders ALL examples with mixed cue -----
+def test_few_shot_framing_and_embeds_all_examples():
+    from examples import FEW_SHOT_EXAMPLES
+
+    msgs = few_shot_messages(SAMPLE, "Department: Dresses")
+    (r0, system), (r1, human) = msgs
+    assert r0 == "system" and r1 == "human"
+
+    # 1) the unchanged shared role is the exact prefix
+    assert system.startswith(SYSTEM_ROLE)
+
+    # 2) framing explicitly cues mixed sentiment AND multiple aspects
+    low = system.lower()
+    assert "mixed" in low, "few-shot framing must mention mixed sentiment"
+    assert "aspect" in low, "few-shot framing must mention aspects"
+
+    # 3) EVERY example's rendered JSON analysis is embedded (not just the first)
+    for i, ex in enumerate(FEW_SHOT_EXAMPLES):
+        rendered = json.dumps(ex["analysis"])
+        assert rendered in system, f"example {i} JSON analysis not embedded in system prompt"
+
+    # 4) the review under analysis is carried into the human turn
+    assert SAMPLE in human
+
+
+# --- ADLC-002 AC6: CoT steps map onto every ReviewAnalysis field ------------
+def test_cot_steps_mapped_to_schema():
+    system = cot_messages(SAMPLE)[0][1]
+
+    # exact SYSTEM_ROLE prefix preserved
+    assert system.startswith(SYSTEM_ROLE)
+
+    # Step 1..4 present and in order
+    positions = [system.find(f"Step {n}") for n in (1, 2, 3, 4)]
+    assert all(p != -1 for p in positions), "one or more Step markers missing"
+    assert positions == sorted(positions), "reasoning steps are out of order"
+
+    low = system.lower()
+    # Step content references each schema concept
+    assert "aspect" in low, "steps must reference aspect identification"
+    assert "sentiment" in low, "steps must reference per-aspect sentiment"
+    assert "1-5" in system, "steps must reference the anchored 1-5 rating scale"
+    assert "overall" in low, "steps must reference overall sentiment"
+    assert "urgency" in low, "steps must reference urgency tiers"
+
+    # instructs recording the explanation into the reasoning field
+    assert "reasoning" in low, "steps must direct the model to record the reasoning field"
